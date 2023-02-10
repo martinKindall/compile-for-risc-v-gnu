@@ -1,13 +1,13 @@
 MEMORY
 {
-   BRAM (RWX) : ORIGIN = 0x0000, LENGTH = 0x200  /* 512B RAM */
+   BRAM (RWX) : ORIGIN = 0x0000, LENGTH = 0x2000
 }
 SECTIONS
 {
     everything :
     {
 	. = ALIGN(4);
-	exampleProg.o (.text)
+	exampleProg2.o (.text)
         *(.*)
     } >BRAM
 }
