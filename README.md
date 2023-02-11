@@ -28,11 +28,18 @@ __Watch out!__, the path may change depending of how did you setup the multilib,
 riscv32-unknown-elf-ld -o exampleC2.elf -T bram.ld -m elf32lriscv -nostdlib --no-relax /(RVTOOLCHAIN_GCC_LIB_DIR)/libgcc.a
 ```
 
-# (Optional) Generating .HEX file (for FPGA)
+# (Optional) Generating .HEX dump (for FPGA)
+
+## Alternative 1: use standard tools
+
+```bash
+riscv32-unknown-elf-objcopy -O binary exampleProg.elf exampleProg.bin
+hexdump -e '"%08x\n"' exampleProg.bin > exampleProg.hex
+```
+
+## Alternative 2: use elf2hex
 
 - A guide to install [the elf2hex tool](https://github.com/martinKindall/elf2hex)
-
-## Example
 
 ```bash
 riscv32-unknown-elf-elf2hex --bit-width 32 --input exampleProg.elf --output exampleProg.hex
