@@ -7,7 +7,7 @@ SECTIONS
     everything :
     {
 	. = ALIGN(4);
-	exampleC.o (.text)
+	example.o (.text)
         *(.*)
     } >BRAM
 }

@@ -6,5 +6,5 @@ int main() {
 
     int result = anumber * another;
 
-    return 0;
+    return result;
 }
