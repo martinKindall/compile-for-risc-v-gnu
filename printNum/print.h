@@ -1,0 +1,2 @@
+
+void printshort(short int);
