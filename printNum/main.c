@@ -1,12 +1,19 @@
-#include "print.h"
+#include "codigo_morsa.h"
 
 int main() {
 
-    short int a = 2000;
-    short int b = 5000;
-    short int result = a + b;
+    unsigned short a = 750;
+    unsigned short b = 10;
+    unsigned short result = a * b;
 
     printshort(result);
+
+    while(1) {
+        digitalwrite(0b11111);
+        delay(25);
+        digitalwrite(0b0);
+        delay(25);
+    }
 
     return 0;
 }

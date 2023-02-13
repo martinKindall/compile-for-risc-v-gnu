@@ -10,5 +10,5 @@
 .globl digitalwrite
 
 digitalwrite:
-    sw      a0, IO_LEDS(gp)
+    sb      a0, IO_LEDS(gp)
     ret
