@@ -1,10 +1,21 @@
 #include "codigo_morsa.h"
 
+
+int powerSum(int n1, int n2) {
+    return n1 * n1 + n2 * n2;
+}
+
+int multiplicationAndSum(int n1, int n2) {
+    int temp = powerSum(n1, n2);
+    
+    return n1 * n2 + powerSum(temp, n2);
+}
+
 int main() {
 
-    unsigned short a = 750;
-    unsigned short b = 10;
-    unsigned short result = a * b;
+    unsigned short a = 5;
+    unsigned short b = 9;
+    unsigned short result = multiplicationAndSum(a, b);
 
     printshort(result);
 
