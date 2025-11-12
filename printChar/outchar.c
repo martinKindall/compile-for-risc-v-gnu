@@ -9,6 +9,10 @@
 #define FRAMEBUFFER_COLS 80
 #define FRAMEBUFFER_ROWS 30
 
+// Static variables to maintain cursor position across function calls
+static unsigned int s_cursor_col = 0;
+static unsigned int s_cursor_row = 0;
+
 // --- Function Implementation ---
 
 /**
@@ -26,10 +30,6 @@
 void outchar(unsigned char c) {
     // Pointer to the volatile memory-mapped I/O device
     volatile unsigned char *framebuffer = FRAMEBUFFER_BASE;
-
-    // Static variables to maintain cursor position across function calls
-    static unsigned int s_cursor_col = 0;
-    static unsigned int s_cursor_row = 0;
 
     // --- 1. Handle Character Input ---
 

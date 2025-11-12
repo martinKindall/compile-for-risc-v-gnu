@@ -23,7 +23,18 @@ LINK_OBJS = $(OBJS)
 # --- Targets ---
 
 # Default target
-all: print_char.hex
+all: print_char.hex program_data.hex
+
+program_data.hex: program_data.bin
+	@echo "==> Creating Data HEX file..."
+	$(HEXDUMP) -v -e '"%08x\n"' $< > $@
+	@echo "==> Build complete: program_data.hex"
+
+program_data.bin: print_char.elf
+	@echo "==> Creating data binary..."
+	# This combines .data, .rodata, and .bss (which is just empty space)
+	$(OBJCOPY) -O binary -j .data -j .rodata -j .bss $< $@
+	@echo "==> Build complete: program_data.bin"
 
 print_char.hex: print_char.bin
 	@echo "==> Creating HEX file..."
@@ -44,7 +55,6 @@ print_char.elf: $(OBJS)
 # Pattern rule for compiling .c files to .o files
 %.o: %.c
 	@echo "==> Compiling C: $<"
-	# Note: Changed from "-r" to "-c".
 	# "-c" is the standard flag to "compile only, do not link".
 	$(GCC) $< -o $@
 
@@ -57,4 +67,4 @@ print_char.elf: $(OBJS)
 .PHONY: clean all
 clean:
 	@echo "==> Cleaning up built files..."
-	rm -f $(OBJS) print_char.elf print_char.hex print_char.bin
+	rm -f $(OBJS) print_char.elf print_char.hex print_char.bin program_data.bin program_data.hex
