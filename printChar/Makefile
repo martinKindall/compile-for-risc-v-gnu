@@ -32,7 +32,7 @@ program_data.hex: program_data.bin
 
 program_data.bin: print_char.elf
 	@echo "==> Creating data binary..."
-	# This combines .data, .rodata, and .bss (which is just empty space)
+	# This combines .data, .rodata, and .bss (preserves same order of loader.ld)
 	$(OBJCOPY) -O binary -j .data -j .rodata -j .bss $< $@
 	@echo "==> Build complete: program_data.bin"
 
