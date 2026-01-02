@@ -1,14 +1,11 @@
 # --- Toolchain Definitions ---
 AS = riscv32-unknown-elf-as -march=rv32i -mabi=ilp32
-GCC = riscv32-unknown-elf-gcc -march=rv32i -mabi=ilp32 -c
+GCC = riscv32-unknown-elf-gcc -march=rv32i -mabi=ilp32
 LD = riscv32-unknown-elf-ld
 OBJCOPY = riscv32-unknown-elf-objcopy
 HEXDUMP = hexdump
 
-# --- Paths ---
-# You may need to adjust this path to your system
-PATH_TO_LIBGCC = ~/informatica/risc-v/install/rv32i/lib/gcc/riscv32-unknown-elf/11.1.0
-LIBGCC_A = $(PATH_TO_LIBGCC)/libgcc.a
+#libgcc will be used implicitly because our core is rv32i
 
 # --- Source Files ---
 C_SRCS = main.c outchar.c
@@ -50,13 +47,13 @@ print_char.bin: print_char.elf
 
 print_char.elf: $(OBJS)
 	@echo "==> Linking ELF file..."
-	$(LD) $(LINK_OBJS) -o $@ -T loader.ld -m elf32lriscv -nostdlib --no-relax $(LIBGCC_A)
+	$(GCC) $(LINK_OBJS) -o $@ -nostdlib -lgcc -T loader.ld
 
 # Pattern rule for compiling .c files to .o files
 %.o: %.c
 	@echo "==> Compiling C: $<"
 	# "-c" is the standard flag to "compile only, do not link".
-	$(GCC) $< -o $@
+	$(GCC) -c $< -o $@
 
 # Pattern rule for assembling .S files to .o files
 %.o: %.S
