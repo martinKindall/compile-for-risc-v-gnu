@@ -1,9 +1,32 @@
 # Compiling code for the RISC-V
+## (Updated 2026-01)
+Tested on Ubuntu 24.04.1 (WSL2)
 
-## Requirements
+Kernel 6.6.87.2-microsoft-standard-WSL2
+
+## Requirements 
 
 - RISC-V Toolchain (32 or 64 bits, in this example I will use the 32 version)
-- Here's a [guide how to easily build](https://github.com/johnwinans/riscv-toolchain-install-guide) the 32-bits version with the ISA of your choice
+  - This [is the repository](https://github.com/riscv-collab/riscv-gnu-toolchain/commits/2026.01.01/) I used to install the toolchain, precisely tag 2026.01.01.
+  - Basically clone the repo, checkout the tag and install the Prerequisites for Ubuntu.
+  - Then configure the installation for baremetal Risc-V, 32 bits RV32I
+    ```shell
+    sudo mkdir /opt/riscv
+    sudo chown -R <your_ubuntu_username> /opt/riscv/
+    sudo chgrp -R <your_ubuntu_username> /opt/riscv/
+
+    ./configure --prefix=/opt/riscv --with-arch=rv32i --with-abi=ilp32
+    make
+    ```
+  - The installation might take up around 1 hour. Verify it went successful by:
+    ```shell
+    cd /opt/riscv/bin
+    ./riscv32-unknown-elf-gcc --version
+    ```
+  - Add the riscv toolchain to PATH by adding this to the .bashrc:
+    ```shell
+    export PATH=$PATH:/opt/riscv/bin
+    ```
 
 ## Assembler example
 
@@ -12,21 +35,15 @@ riscv32-unknown-elf-as exampleAsm.S -o exampleAsm.o
 riscv32-unknown-elf-ld -o exampleAsm.elf -T asm.ld -m elf32lriscv -nostdlib --no-relax
 ```
 
-## C example
+## C example (compiling and linking)
 
 ```bash
-riscv32-unknown-elf-gcc -r exampleC.c -o exampleC.o
-riscv32-unknown-elf-ld -o exampleC.elf -T c_prog.ld -m elf32lriscv -nostdlib --no-relax
+riscv32-unknown-elf-gcc -c example.c -o example.o
+riscv32-unknown-elf-gcc example.o -o example.elf -nostdlib -lgcc -T loader.ld
 ```
 
-Trying to use multiplication or other advanced math operations with the rv32I arch? No problem, you just
-have to declare the path to the correct libgcc library on the __loader__ step.
-
-__Watch out!__, the path may change depending of how did you setup the multilib, just beware of choosing the libgcc.a corresponding to the rv32I.
-
-```bash
-riscv32-unknown-elf-ld -o exampleC2.elf -T bram.ld -m elf32lriscv -nostdlib --no-relax /(RVTOOLCHAIN_GCC_LIB_DIR)/libgcc.a
-```
+Trying to use multiplication or other advanced math operations with the rv32I arch? No problem, by linking with
+the flag ```-lgcc``` the compiler will use software multiplication by using __libgcc__.
 
 # (Optional) Generating .HEX dump (for FPGA)
 
