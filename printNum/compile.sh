@@ -1,6 +1,5 @@
 AS='riscv32-unknown-elf-as -march=rv32i -mabi=ilp32'
 GCC='riscv32-unknown-elf-gcc -march=rv32i -mabi=ilp32'
-LD=riscv32-unknown-elf-ld
 HEXDUMP=hexdump
 
 $AS printshort.S -o printshort.o &&
